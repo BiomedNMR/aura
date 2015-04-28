@@ -135,6 +135,9 @@ void gauss_newton(
 
         // --------------------
 
+        if (isnan(cg_res))
+            return;
+
         #ifdef IRGN_DEBUG
         //std::cout << "(cg its: " << cg_its << ") res: " << cg_res << std::endl;
         std::cout << "(" << cg_its << ")"  << std::endl;
