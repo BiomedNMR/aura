@@ -8,8 +8,8 @@
 #include <boost/aura/backend.hpp>
 #include <boost/aura/math/complex.hpp>
 
-// #include "split_interleaved_s2i_kernels.hpp"
-// #include "split_interleaved_i2s_kernels.hpp"
+#include "split_interleaved_s2i_kernels.hpp"
+#include "split_interleaved_i2s_kernels.hpp"
 
 namespace boost
 {
