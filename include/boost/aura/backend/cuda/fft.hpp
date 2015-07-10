@@ -88,7 +88,7 @@ public:
 	                std::size_t ostride = 1, std::size_t odist = 0) :
 		context_(d.get_context()), type_(type),
 		dim_(std::get<0>(dim)),
-		batch_(std::max(1, product(std::get<1>(dim))))
+		batch_(std::max<size_t>(1, product(std::get<1>(dim))))
 	{
 		initialize(iembed, istride, idist,
 				oembed, ostride, odist);

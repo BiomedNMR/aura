@@ -23,7 +23,7 @@ template <typename T, std::size_t max_size_ = AURA_SVEC_MAX_SIZE>
 class svec;
 
 template <typename T, std::size_t max_size_>
-T product(const svec<T, max_size_> & v);
+std::size_t product(const svec<T, max_size_> & v);
 
 /**
  * svec small vector class, probably can be replaced by std::array with
@@ -267,10 +267,10 @@ private:
 
 
 template <typename T, std::size_t size_>
-T product_impl(const std::array<T, size_> & v, std::size_t size,
+std::size_t product_impl(const std::array<T, size_> & v, std::size_t size,
 		const boost::true_type &)
 {
-	T r = v[0];
+	std::size_t r = v[0];
 	for(std::size_t i=1; i<size; i++) {
 		r *= v[i];
 	}
@@ -288,7 +288,7 @@ T product_impl(const std::array<T, size_> & v, std::size_t size,
 /// calculate the product of all elements of svec
 /// (if *= operator exists for T)
 template <typename T, std::size_t max_size_>
-T product(const svec<T, max_size_> & v)
+std::size_t product(const svec<T, max_size_> & v)
 {
 	if(0 >= v.size()) {
 		// FIXME: should this return 1?
@@ -324,7 +324,7 @@ std::tuple<svec<T, max_size_>, svec<T, max_size_>>
 /// calculate the product of all elements of std::array
 /// (if *= operator exists for T)
 template <typename T, std::size_t size_>
-T product(const std::array<T, size_> & v)
+std::size_t product(const std::array<T, size_> & v)
 {
 	assert(0 < v.size());
 	return product_impl(v, v.size(),

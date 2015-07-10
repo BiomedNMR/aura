@@ -196,7 +196,8 @@ std::tuple<std::vector<T>, bounds> coo_read(const char* filename)
 	// parse header
 	std::get<1>(r) = coo_parse_header(header);
 	// resize output
-	std::get<0>(r).resize(product(std::get<1>(r)));
+	std::size_t num_elements = product(std::get<1>(r));
+	std::get<0>(r).resize(num_elements);
 	// read data
 	stream.read((char*)(std::get<0>(r).data()), 
 			std::get<0>(r).size()*sizeof(T));
