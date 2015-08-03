@@ -16,6 +16,7 @@
 #include <boost/aura/backend/opencl/bundle.hpp>
 #include <boost/aura/backend/opencl/args.hpp>
 #include <boost/aura/backend/shared/calc_mesh_bundle.hpp>
+#include <boost/config.hpp>
 
 namespace boost
 {
@@ -25,15 +26,16 @@ namespace opencl {
 
 namespace detail {
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES) 
 template<unsigned long N>
 inline void invoke_impl(kernel& k, const mesh& m, const bundle& b,
 		const args_t<N>&& a, feed & f)
-#else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#else // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 inline void invoke_impl(kernel& k, const mesh& m, const bundle& b,
 	const args_t& a, feed& f)
-#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#endif // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 {
+
 	// set parameters
 	for (std::size_t i=0; i<a.second.size(); i++) {
 		AURA_OPENCL_SAFE_CALL(clSetKernelArg(k, i,
@@ -70,13 +72,13 @@ inline void invoke_impl(kernel& k, const mesh& m, const bundle& b,
 	free(a.first);
 }
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 template<unsigned long N>
 inline void invoke_impl(kernel & k, const ::boost::aura::bounds& b,
 		const args_t<N>&& a, feed & f)
-#else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#else // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 inline void invoke_impl(kernel & k, const bounds& b, const args_t & a, feed & f)
-#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#endif // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 {
 	// set parameters
 	for (std::size_t i=0; i<a.second.size(); i++) {
@@ -116,7 +118,7 @@ inline void invoke_impl(kernel & k, const bounds& b, const args_t & a, feed & f)
 } // namespace detail
 
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 
 /// invoke kernel without args
 inline void invoke(kernel& k, const mesh& m, const bundle& b, feed& f)
@@ -146,7 +148,7 @@ inline void invoke(kernel& k, const std::size_t s, const args_t<N>&& a, feed& f)
 	detail::invoke_impl(k, bounds(s), std::move(a), f);
 }
 
-#else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#else // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 
 /// invoke kernel without args
 inline void invoke(kernel& k, const mesh& m, const bundle& b, feed& f)
@@ -173,7 +175,7 @@ inline void invoke(kernel& k, const std::size_t s, const args_t& a, feed& f)
 	detail::invoke_impl(k, bounds(s), a, f);
 }
 
-#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#endif // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 
 } // namespace opencl
 } // namespace backend_detail

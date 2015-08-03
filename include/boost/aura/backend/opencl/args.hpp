@@ -15,7 +15,7 @@ namespace aura {
 namespace backend_detail {
 namespace opencl {
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 
 typedef std::pair<void *, std::size_t> arg_t;
 template<unsigned long N>
@@ -54,7 +54,7 @@ args_t<sizeof...(Targs)> args(const Targs... ar)
 }
 
 
-#else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#else // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 
 typedef std::pair<void *, std::size_t> arg_t;
 typedef svec<arg_t, AURA_MAX_KERNEL_ARGS> args_tt;
@@ -602,7 +602,7 @@ args_t args(const T0 & a0, const T1 & a1, const T2 & a2, const T3 & a3,
   );
 }
 
-#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#endif // !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES) && !defined(BOOST_NO_TEMPLATE_ALIASES)
 
 } // opencl
 } // backend_detail
