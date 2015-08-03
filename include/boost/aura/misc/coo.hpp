@@ -46,9 +46,9 @@ inline void fill_stride_end(std::vector<coo_index>& result)
 inline std::array<char, 4096> coo_build_header(const std::vector<coo_index>& data)
 {
 	std::array<char, 4096> header;
-        header.fill(0);
+	header.fill(0);
 	int p = 0;
-        p += snprintf(&header[0], 4096, 
+	p += snprintf(&header[0], 4096,
 			"Type: float\nDimensions: %lu\n", data.size());
 
         for (std::size_t n = 0; n < data.size(); n++) {
@@ -136,24 +136,24 @@ void coo_write(const InputIt first, const Bounds& b, const char* filename)
 	stream.write((char*)std::addressof(*first), 
 			sizeof(
 				typename std::iterator_traits<InputIt>
-				::value_type
+					::value_type
 				) * 
 			product(b));
 }
 
 // coo_write for standard aura device_arrays
 template <typename T>
-void coo_write(const boost::aura::device_array<T> &gpuData, const char* filename, feed &f)
+void coo_write(const device_array<T> &gpuData, const char* filename, feed &f)
 {
     // get data dimension
-    aura::bounds b = gpuData.get_bounds();
+    bounds b = gpuData.get_bounds();
 
     // create temporary cpu array
     std::vector<T> cpuData(b);
 
     // copy data to cpu
-    boost::aura::copy(gpuData, cpuData, f);
-    boost::aura::wait_for(f);
+    copy(gpuData, cpuData, f);
+    wait_for(f);
 
     // call standard coo_write
     coo_write(cpuData.begin(), b, filename);
@@ -164,14 +164,14 @@ template <typename DeviceRangeType>
 void coo_write(const DeviceRangeType &gpuData, const char* filename, feed &f)
 {
     // get data dimension
-    aura::bounds b = gpuData.get_bounds();
+    bounds b = gpuData.get_bounds();
 
     // create temporary cpu array
     std::vector<typename DeviceRangeType::value_type> cpuData(b);
 
     // copy data to cpu
-    boost::aura::copy(gpuData, cpuData, f);
-    boost::aura::wait_for(f);
+    copy(gpuData, cpuData, f);
+    wait_for(f);
 
     // call standard coo_write
     coo_write(cpuData.begin(), b, filename);
@@ -206,20 +206,21 @@ std::tuple<std::vector<T>, bounds> coo_read(const char* filename)
 
 // coo read into device array
 template <typename T>
-std::tuple<boost::aura::device_array<T>, bounds> coo_read(const char* filename, aura::device &d, feed &f)
+std::tuple<device_array<T>, bounds> coo_read(const char* filename,
+											 device &d, feed &f)
 {
     // load coo to host memory
-    boost::aura::bounds b;
+    bounds b;
     std::vector<T> data;
     std::tie(data, b) = coo_read<T>(filename);
 
     // create output
-    std::tuple<aura::device_array<T>, bounds> r;
-    std::get<0>(r) = aura::device_array<T>(b,d);
+    std::tuple<device_array<T>, bounds> r;
+    std::get<0>(r) = device_array<T>(b,d);
     std::get<1>(r) = b;
 
     //copy data to device
-    aura::copy(data, std::get<0>(r),f);
+    copy(data, std::get<0>(r),f);
     wait_for(f);
 
     return(r);
