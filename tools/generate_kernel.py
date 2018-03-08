@@ -67,7 +67,7 @@ for k in kernels:
         copyfile(k, tname)
         os.system("/usr/local/cuda/bin/nvcc -I "+includedir+
             " -DAURA_BACKEND_CUDA -o=" + pname + 
-            " -arch=compute_20 --ptx " + tname)
+            " -arch=compute_35 --ptx " + tname)
 
         # create hpp files containing PTX kernel strings
         with open(hname, 'w+') as ofh:
